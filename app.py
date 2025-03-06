@@ -23,7 +23,8 @@ def add_background(image_path):
                 background-position: center;
                 background-repeat: no-repeat;
                 background-attachment: fixed;
-                opacity: 0.7;
+                backdrop-filter: blur(10px);
+                opacity: 0.9;
             }}
             </style>
             """
@@ -48,28 +49,28 @@ with left_column:
     st.write("Enter the parameters to predict fire risk:")
     
     # User Input
-    rain = st.number_input("Rain (mm)", 
+    rain = st.slider("Rain (mm)", 
                             min_value=0.0, 
                             max_value=50.0, 
                             value=0.0, 
                             step=0.1,
                             key="rain_input")
     
-    ffmc = st.number_input("FFMC (Fine Fuel Moisture Code)", 
+    ffmc = st.slider("FFMC (Fine Fuel Moisture Code)", 
                             min_value=0.0, 
                             max_value=100.0, 
                             value=0.0, 
                             step=0.1,
                             key="ffmc_input")
     
-    dmc = st.number_input("DMC (Duff Moisture Code)", 
+    dmc = st.slider("DMC (Duff Moisture Code)", 
                            min_value=0.0, 
                            max_value=300.0, 
                            value=0.0, 
                            step=0.1,
                            key="dmc_input")
     
-    isi = st.number_input("ISI (Initial Spread Index)", 
+    isi = st.slider("ISI (Initial Spread Index)", 
                            min_value=0.0, 
                            max_value=50.0, 
                            value=0.0, 
