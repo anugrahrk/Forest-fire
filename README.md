@@ -5,3 +5,4 @@
  feb 27 - finished building model for classification using Random Forest   
  march 06 - finish building frontent using streamlit  
  march 07 - Implemented slider instead of inputbox
+ march 18- build home page for flask and also live fire detection in streamlit, now need to implement it in flask
