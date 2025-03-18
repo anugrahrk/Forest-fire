@@ -1,0 +1,167 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e6f0fa; /* Light blue background to match landing page */
+    color: #000000;
+    background-image: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)), url('/static/images/background.jpg'); /* Optional background image */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+.container {
+    max-width: 700px;
+    margin: 60px auto; /* Center with margin */
+    /* background: rgba(255, 255, 255, 0.95); Slightly transparent white for contrast */
+    padding: 50px;
+    border-radius: 20px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+    font-size: 4em;
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #007bff; /* Blue to match landing page buttons */
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]:hover {
+    background: #ccc;
+}
+
+span[id$="-value"] {
+    font-weight: normal;
+    color: #ff0000;
+    margin-left: 10px;
+}
+
+button {
+    background-color: #220ff4c0; /* Orange to match previous design */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 25%;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #6e94ff; /* Darker orange on hover */
+}
+
+#result {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 5px;
+    background: #49494994;
+}
+
+#fire-status {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#tips {
+    margin-top: 10px;
+}
+
+#tips p {
+    font-weight: bold;
+    color: #e6e6e6;
+}
+
+#tips ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    color: #e6e6e6;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+    height: 20px;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+}
+
+.green {
+    background-color: #28a745; /* Green for <50% */
+}
+
+.red {
+    background-color: #dc3545; /* Red for >=50% */
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 1em;
+    }
+}
+#service-card h3, #service-card p {
+    text-decoration: none;
+}
+p{
+    color: #ffffff;
+}
