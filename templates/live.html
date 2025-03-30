@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Detection System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            color: #444;
+            margin-top: 0;
+        }
+        
+        /* Video Upload Section */
+        .upload-container {
+            margin: 20px 0;
+        }
+        #fileInput {
+            display: none;
+        }
+        .upload-area {
+            border: 3px dashed #ccc;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #2196F3;
+            background-color: #f5f9ff;
+        }
+        #fileName {
+            margin: 10px 0;
+            font-style: italic;
+            color: #666;
+        }
+        
+        /* Camera Section */
+        .camera-container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+        #cameraFeed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Buttons */
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        #submitBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #submitBtn:hover {
+            background-color: #45a049;
+        }
+        #submitBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #downloadBtn {
+            background-color: #2196F3;
+            color: white;
+            display: none;
+        }
+        #startCamera {
+            background-color: #2196F3;
+            color: white;
+        }
+        #stopCamera {
+            background-color: #f44336;
+            color: white;
+        }
+        #stopCamera {
+            display: none;
+        }
+        
+        /* Progress */
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .progress-started {
+            width: 100%;
+            background-color: #FF9800;
+        }
+        .progress-complete {
+            width: 100%;
+            background-color: #4CAF50;
+        }
+        
+        /* Status */
+        #status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .inactive {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .processing {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .complete {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fire Detection System</h1>
+    
+    <div class="section">
+        <h2>Video Processing</h2>
+        <div class="upload-container">
+            <input type="file" id="fileInput" accept="video/*">
+            <div class="upload-area" id="uploadArea">
+                <h3>Click to select video</h3>
+                <p>or drag and drop file here</p>
+                <div id="fileName"></div>
+            </div>
+            <button id="submitBtn" disabled>Process Video</button>
+            <button id="downloadBtn">Download Processed Video (.avi)</button>
+        </div>
+        
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        
+        <div id="status" class="inactive">No video selected</div>
+    </div>
+    
+    <div class="section">
+        <h2>Live Camera Detection</h2>
+        <div>
+            <button id="startCamera">Start Camera</button>
+            <button id="stopCamera">Stop Camera</button>
+        </div>
+        <div class="camera-container">
+            <img id="cameraFeed" style="display: none;">
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileNameDiv = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const progressBar = document.getElementById('progressBar');
+        const statusDiv = document.getElementById('status');
+        const startCameraBtn = document.getElementById('startCamera');
+        const stopCameraBtn = document.getElementById('stopCamera');
+        const cameraFeed = document.getElementById('cameraFeed');
+        
+        let checkInterval = null;
+        let downloadPath = '';
+
+        // File Upload Handling
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#2196F3';
+            uploadArea.style.backgroundColor = '#f0f8ff';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '';
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+        });
+
+        function handleFileSelect() {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileNameDiv.textContent = `Selected: ${file.name}`;
+                submitBtn.disabled = false;
+                statusDiv.textContent = 'Ready to process';
+                statusDiv.className = 'inactive';
+                downloadBtn.style.display = 'none';
+                progressBar.className = 'progress-bar';
+                
+                // Auto-submit when file is selected
+                submitBtn.click();
+            }
+        }
+
+        // Process Video
+        submitBtn.addEventListener('click', () => {
+            if (!fileInput.files.length) return;
+            
+            const formData = new FormData();
+            formData.append('video', fileInput.files[0]);
+            
+            submitBtn.disabled = true;
+            statusDiv.textContent = 'Processing video...';
+            statusDiv.className = 'processing';
+            progressBar.className = 'progress-bar progress-started';
+            downloadBtn.style.display = 'none';
+            
+            fetch('/upload_and_process', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Start checking status
+                    checkInterval = setInterval(checkStatus, 1000);
+                } else {
+                    resetProcessingUI();
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resetProcessingUI();
+                alert('Error processing video');
+            });
+        });
+
+        // Download processed video
+        downloadBtn.addEventListener('click', () => {
+            if (downloadPath) {
+                window.location.href = downloadPath;
+            }
+        });
+
+        function checkStatus() {
+            fetch('/get_status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.video_ready) {
+                    clearInterval(checkInterval);
+                    statusDiv.textContent = 'Processing complete!';
+                    statusDiv.className = 'complete';
+                    progressBar.className = 'progress-bar progress-complete';
+                    downloadBtn.style.display = 'inline-block';
+                    submitBtn.disabled = false;
+                    downloadPath = data.download_path;
+                } else if (!data.processing) {
+                    // Processing failed or was stopped
+                    clearInterval(checkInterval);
+                    resetProcessingUI();
+                }
+            })
+            .catch(error => {
+                console.error('Error checking status:', error);
+            });
+        }
+
+        function resetProcessingUI() {
+            statusDiv.textContent = 'Error processing video';
+            statusDiv.className = 'inactive';
+            progressBar.className = 'progress-bar';
+            submitBtn.disabled = false;
+            downloadBtn.style.display = 'none';
+        }
+
+        // Camera Controls
+        startCameraBtn.addEventListener('click', () => {
+            fetch('/control_camera', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=start'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    startCameraBtn.style.display = 'none';
+                    stopCameraBtn.style.display = 'inline-block';
+                    cameraFeed.style.display = 'block';
+                    cameraFeed.src = '/video_feed';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error starting camera');
+            });
+        });
+
+        stopCameraBtn.addEventListener('click', () => {
+            fetch('/control_camera', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=stop'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    startCameraBtn.style.display = 'inline-block';
+                    stopCameraBtn.style.display = 'none';
+                    cameraFeed.style.display = 'none';
+                    cameraFeed.src = '';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error stopping camera');
+            });
+        });
+    </script>
+</body>
+</html>

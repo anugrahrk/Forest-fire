@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildfire Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .progress-bar-smoke {
+            background-color: #ffc107 !important;
+        }
+        .progress-bar-fire {
+            background-color: #dc3545 !important;
+        }
+        .progress-bar-no-fire {
+            background-color: #28a745 !important;
+        }
+        #imagePreview {
+            max-height: 300px;
+            display: none;
+        }
+        .prediction-card {
+            transition: all 0.3s ease;
+        }
+        .probability-meter {
+            height: 20px;
+            margin-bottom: 5px;
+        }
+        .text-smoke {
+            color: #ffc107 !important;
+        }
+        .text-fire {
+            color: #dc3545 !important;
+        }
+        .text-no-fire {
+            color: #28a745 !important;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="text-center mb-0">Wildfire Detection System</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <label for="imageUpload" class="btn btn-primary btn-lg">
+                                Upload Image
+                            </label>
+                            <input type="file" id="imageUpload" accept="image/*" class="d-none">
+                        </div>
+                        
+                        <div class="text-center mb-4">
+                            <img id="imagePreview" class="img-fluid rounded shadow">
+                        </div>
+                        
+                        <div class="text-center mb-4">
+                            <button id="predictBtn" class="btn btn-success btn-lg" disabled>
+                                Detect Wildfire
+                            </button>
+                        </div>
+                        
+                        <div id="resultContainer" class="d-none">
+                            <div class="card prediction-card mb-4">
+                                <div class="card-header">
+                                    <h4 class="mb-0">Detection Result</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h3 id="predictionText" class="text-center mb-4"></h3>
+                                    
+                                    <div class="mb-3">
+                                        <h5>Confidence Levels:</h5>
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Smoke</span>
+                                                <span id="smokeProb">0%</span>
+                                            </div>
+                                            <div class="progress probability-meter">
+                                                <div id="smokeBar" class="progress-bar progress-bar-smoke" role="progressbar"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Fire</span>
+                                                <span id="fireProb">0%</span>
+                                            </div>
+                                            <div class="progress probability-meter">
+                                                <div id="fireBar" class="progress-bar progress-bar-fire" role="progressbar"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between">
+                                                <span>No Fire</span>
+                                                <span id="noFireProb">0%</span>
+                                            </div>
+                                            <div class="progress probability-meter">
+                                                <div id="noFireBar" class="progress-bar progress-bar-no-fire" role="progressbar"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreview = document.getElementById('imagePreview');
+            const predictBtn = document.getElementById('predictBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const predictionText = document.getElementById('predictionText');
+            
+            // Probability elements
+            const smokeProb = document.getElementById('smokeProb');
+            const fireProb = document.getElementById('fireProb');
+            const noFireProb = document.getElementById('noFireProb');
+            const smokeBar = document.getElementById('smokeBar');
+            const fireBar = document.getElementById('fireBar');
+            const noFireBar = document.getElementById('noFireBar');
+            
+            imageUpload.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        imagePreview.src = event.target.result;
+                        imagePreview.style.display = 'block';
+                        predictBtn.disabled = false;
+                        resultContainer.classList.add('d-none');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            predictBtn.addEventListener('click', function() {
+                if (!imageUpload.files.length) return;
+                
+                predictBtn.disabled = true;
+                predictBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+                
+                const formData = new FormData();
+                formData.append('image', imageUpload.files[0]);
+                
+                fetch('/image_detection', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'error') {
+                        throw new Error(data.message);
+                    }
+                    
+                    resultContainer.classList.remove('d-none');
+                    
+                    // Update prediction text and styling
+                    if (data.prediction === 'Fire') {
+                        predictionText.className = 'text-center mb-4 text-fire';
+                        predictionText.textContent = `FIRE DETECTED (${data.confidence}% confidence)`;
+                    } 
+                    else if (data.prediction === 'Smoke') {
+                        predictionText.className = 'text-center mb-4 text-smoke';
+                        predictionText.textContent = `SMOKE DETECTED (${data.confidence}% confidence)`;
+                    }
+                    else {
+                        predictionText.className = 'text-center mb-4 text-no-fire';
+                        predictionText.textContent = `NO FIRE DETECTED (${data.confidence}% confidence)`;
+                    }
+                    
+                    // Update probability bars
+                    smokeProb.textContent = `${data.probabilities.Smoke}%`;
+                    fireProb.textContent = `${data.probabilities.Fire}%`;
+                    noFireProb.textContent = `${data.probabilities.No_Fire}%`;
+                    
+                    smokeBar.style.width = `${data.probabilities.Smoke}%`;
+                    fireBar.style.width = `${data.probabilities.Fire}%`;
+                    noFireBar.style.width = `${data.probabilities.No_Fire}%`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Error: ${error.message}`);
+                })
+                .finally(() => {
+                    predictBtn.disabled = false;
+                    predictBtn.textContent = 'Detect Wildfire';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

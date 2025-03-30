@@ -2,12 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e6f0fa; /* Light blue background to match landing page */
-    color: #000000;
-    background-image: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)), url('/static/images/background.jpg'); /* Optional background image */
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
+    background:linear-gradient(to top, #000000, #2b2c2d)
 }
 
 .container {
@@ -53,7 +48,7 @@ input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     width: 20px;
     height: 20px;
-    background: #007bff; /* Blue to match landing page buttons */
+    background: #5e5e5e; /* Blue to match landing page buttons */
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -74,12 +69,12 @@ input[type="range"]:hover {
 
 span[id$="-value"] {
     font-weight: normal;
-    color: #ff0000;
+    color: #ffffff;
     margin-left: 10px;
 }
 
 button {
-    background-color: #220ff4c0; /* Orange to match previous design */
+    background-color: #3a3c3d; /* Orange to match previous design */
     color: white;
     border: none;
     padding: 12px 20px;
@@ -91,7 +86,7 @@ button {
 }
 
 button:hover {
-    background-color: #6e94ff; /* Darker orange on hover */
+    background-color: #000000; /* Darker orange on hover */
 }
 
 #result {
@@ -164,4 +159,19 @@ button:hover {
 }
 p{
     color: #ffffff;
+}
+.back{
+    color: white;
+    font:bold;
+    position: absolute;
+    left: 40px;
+    top: 40px;
+    font-style: italic;
+    font-size: 20px;
+    text-decoration: none;
+}
+.back:hover{
+    color: #919397;
+    text-decoration: underline;
+
 }

@@ -2,8 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #383838;
-    color: #333;
+    background: linear-gradient(to top, #000000, #292929);
+    height: 100vh;
 }
 
 header {
@@ -28,6 +28,7 @@ nav a:hover {
 main {
     padding: 20px;
     text-align: center;
+    height: fit-content;
 }
 
 h2 {
@@ -41,6 +42,10 @@ h2 {
     justify-content: space-around;
     flex-wrap: nowrap; /* Prevent wrapping to the next line */
     gap: 10px; /* Reduce the gap between cards */
+    
+}
+.service-card:hover {
+    transform: scale(1.1);
 }
 
 .service-card {
@@ -51,17 +56,20 @@ h2 {
     padding: 10px; /* Reduce padding inside the cards */
     text-align: center;
     flex: 1 1 auto; /* Allow cards to grow and shrink as needed */
-    text-decoration: none
-    ;
+    text-decoration: none;
+    box-shadow: #050404;
+    transition: transform 0.3s ease-in-out;
 }
 
 .service-card img {
     width: 100%;
     height: 150px; /* Reduce the height of the images */
     border-radius: 5px;
-    object-fit: cover;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap; /* Prevent wrapping to the next line */
+    gap: 10px;
 }
-
 .service-card h3 {
     margin: 10px 0;
     font-size: 1.2em; /* Reduce the font size of the headings */
@@ -83,7 +91,7 @@ footer {
     bottom: 0;
 }
 .alerts{
-    background-color:#383838; 
+    background-color:#050404; 
     color: white;
     border: none;
     padding: 40px 20px;
@@ -92,4 +100,88 @@ footer {
     width: 25%;
     font-size: 1.5em;
     transition: background-color 0.3s;
+}
+#ai{
+    /* color: white; /* Base text color */
+    /* text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff; */ 
+    display: inline-block;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 30px; /* Rounded corners */
+    border: none;
+    font-size: 18px;
+    color: white;
+    /* background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); Rainbow gradient */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7), /* Initial white glow */
+                0 0 30px rgba(255, 255, 255, 0.5), /* Increased glow */
+                0 0 45px rgba(255, 255, 255, 0.3); /* Further glow */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition */
+  }
+  
+#ai:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+                0 0 40px rgba(255, 255, 255, 0.7),
+                0 0 60px rgba(255, 255, 255, 0.5); /* Increased glow on hover */
+  }
+.card-split {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+}
+
+.option {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.left-option {
+    background-color: #f0f7ff;
+}
+
+.right-option {
+    background-color: #fff0f0;
+}
+
+.option-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.option:hover {
+    transform: scale(1.05);
+}
+
+.option:hover .option-content {
+    opacity: 1;
+}
+
+.option a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-decoration: none;
+    color: #333;
+    z-index: 1;
+}
+ .card-container {
+    /* width: 300px;
+    height: 200px;
+    position: relative;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
 }

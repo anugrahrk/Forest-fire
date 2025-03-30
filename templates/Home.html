@@ -10,40 +10,47 @@
     <header>
         <h1>Agni</h1>
         <nav>
-            <a href="/">Home</a>
-            <a href="https://github.com" target="_blank">GitHub</a>
-            <a href="https://github.com" target="_blank">Alerts</a>
+        
+            <a href="Ai.html" target="_blank" id="ai">Chat Bot</a>
         </nav>
     </header>
     <main>
         <h2>Welcome to Wildfire Fire Detection System</h2>
         <div class="services">
-            <a href="Predict.html" class="service-card">
+            <div class="service-card">
+                <a href="Predict.html" class="service-card">
                 <img src="{{ url_for('static', filename='images/image.jpg') }}" alt="Prediction">
                 <h3>Forest Fire Prediction</h3>
                 <p>Predict wildfires using Meteorological data</p>
-            </a>
-            <a href="satellite.html" class="service-card">
+                </a>
+            </div>
+            <div class="service-card">
+                <a href="Satellite.html" class="service-card">
                 <img src="{{ url_for('static', filename='images/satellite.jpg') }}" alt="Prediction">
                 <h3>Satellite Image Detection</h3>
                 <p>Detect wildfires using Satellite images</p>
-            </a>
-            <a href="image_detection.html" class="service-card">
+                </a>
+            </div>
+            <div class="service-card">
+                <a href="camera.html" class="service-card">
                 <img src="{{ url_for('static', filename='images/photo.jpg') }}" alt="Prediction">
                 <h3>Fire Detection using photos</h3>
                 <p>Detect wildfires using Real world images</p>
-            </a>
-            <a href="image_detection.html" class="service-card">
+                </a>
+            </div>
+            <div class="service-card">
+                <a href="live.html" class="service-card" >
                 <img src="{{ url_for('static', filename='images/fire.jpg') }}" alt="Prediction">
                 <h3>Live Detection</h3>
                 <p>Detect fires from live camera feed</p>
-            </a>
-        </div>
-        <a href="Alerts.html"> <button class="alerts" > 📢 Get Alerts</button></a>
+                </a>
+            </div>
+            </div>
+        <!-- <a href="Alerts.html"> <button class="alerts" > 📢 Get Alerts</button></a> -->
     </main>
-    <footer>
+    <!-- <footer>
         <p></p>
-    </footer>
+    </footer> -->
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
