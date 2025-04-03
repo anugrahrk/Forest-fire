@@ -10,3 +10,7 @@
 2.Satellite_detection.ipynb - https://www.kaggle.com/datasets/abdelghaniaaba/wildfire-prediction-dataset
 3.camera_detection.ipynb - https://www.kaggle.com/datasets/amerzishminha/forest-fire-smoke-and-non-fire-image-dataset
 4.Fire_deetction.ipynb - https://universe.roboflow.com/sayed-gamall/fire-smoke-detection-yolov11/dataset/2/download/yolov11
+
+references-
+1. https://github.com/ZephyrusBlaze/Wildfire-Detection
+2. https://ieeexplore.ieee.org/document/10792919/
