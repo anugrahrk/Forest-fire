@@ -39,7 +39,8 @@ This project aims to implement a Forest Fire Prediction System using:
 ---
 
 ## 📁 Project Structure
-forest-fire-prediction/ │ 
+forest-fire-prediction/ 
+│ 
 ├── datasets/ # Datasets 
 ├── model/ # Trained models (.h5 / .pt files) 
 ├── scripts/ # Data preprocessing and training scripts 
