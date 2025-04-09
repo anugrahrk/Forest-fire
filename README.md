@@ -84,8 +84,8 @@ forest-fire-prediction/ │
 -Place .h5 and .pt model files in the /model directory.
 
 4.**Install dependencies**
-    ```bash
-   pip install -r requirements.txt
+   ```bash
+      pip install -r requirements.txt
 
 5.**Install dependencies**
   ```bash
