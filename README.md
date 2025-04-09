@@ -1,4 +1,4 @@
-# 🌲🔥 Forest Fire Prediction System
+# Forest Fire Prediction System
 
 A machine learning and deep learning-based system designed to predict and detect forest fires using meteorological data, satellite images, and live video input. The project helps in early fire detection to assist forest departments and emergency services.
 
